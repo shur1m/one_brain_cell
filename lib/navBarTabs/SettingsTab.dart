@@ -29,6 +29,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   style: Theme.of(context).textTheme.bodyText1),
               trailing: CupertinoSwitch(
                 value: _someSetting,
+                activeColor: Theme.of(context).secondaryHeaderColor,
                 onChanged: (bool value) {
                   setState(() {
                     _someSetting = value;

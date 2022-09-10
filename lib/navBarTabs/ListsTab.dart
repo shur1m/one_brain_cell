@@ -32,7 +32,13 @@ class _ListsTabState extends State<ListsTab> {
             }
             int i = index - 1;
             return ListTile(
-              leading: i.isEven ? Icon(Icons.list) : Icon(Icons.folder),
+              leading: i.isEven
+                  ? Icon(
+                      Icons.list,
+                      color: Theme.of(context).iconTheme.color,
+                    )
+                  : Icon(Icons.folder,
+                      color: Theme.of(context).iconTheme.color),
               onTap: () {
                 _displayList(i, context);
               },
