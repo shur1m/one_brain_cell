@@ -8,7 +8,8 @@ class PageCreator {
         child: Text(
           title,
           style: Theme.of(context).textTheme.headline1,
-          overflow: TextOverflow.ellipsis,
+          //overflow: TextOverflow.ellipsis,
+          softWrap: true,
         ));
   }
 
