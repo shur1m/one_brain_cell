@@ -38,39 +38,44 @@ class PageCreator {
     );
   }
 
-  static Widget makeCirclePercentage(double percentage, Color color) {
+  static Widget makeCirclePercentage(double percentage, Color color,
+      double size, double stroke, double fontSize) {
     int displayPercentage = (percentage * 100).toInt();
     return Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
           Text(displayPercentage.toString() + '%',
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+              style:
+                  TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
           CustomPaint(
-            size: Size(200, 200),
-            painter: Arc(1.0, Colors.grey.shade200),
+            size: Size(size, size),
+            painter: Arc(1.0, Colors.grey.shade200, stroke),
           ),
-          CustomPaint(size: Size(200, 200), painter: Arc(percentage, color)),
+          CustomPaint(
+              size: Size(size, size), painter: Arc(percentage, color, stroke)),
         ]);
   }
 }
 
 //for creating arcs of certain length starting from top center
 class Arc extends CustomPainter {
-  Arc(double percentage, Color color) {
+  Arc(double percentage, Color color, double strokeWidth) {
     this.percentage = percentage;
     this.color = color;
+    this.strokeWidth = strokeWidth;
   }
 
   late double percentage;
   late Color color;
+  late double strokeWidth;
 
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Rect.fromCenter(
         center: Offset(size.height / 2, size.width / 2),
-        width: 100,
-        height: 100);
+        width: size.width / 2,
+        height: size.height / 2);
 
     final startAngle = -math.pi / 2;
     final sweepAngle = (math.pi * 2) * this.percentage;
@@ -79,7 +84,7 @@ class Arc extends CustomPainter {
     final paint = Paint()
       ..color = this.color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 15
+      ..strokeWidth = this.strokeWidth
       ..strokeCap = StrokeCap.round;
 
     canvas.drawArc(rect, startAngle, sweepAngle, useCenter, paint);

@@ -20,8 +20,8 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
-        child: PageCreator.makeCirclePercentage(
-            _reviewPercentage, Theme.of(context).secondaryHeaderColor),
+        child: PageCreator.makeCirclePercentage(_reviewPercentage,
+            Theme.of(context).secondaryHeaderColor, 200, 15, 24),
       ),
     );
   }
