@@ -1,2 +1,2 @@
 # one_brain_cell
- A flashcard for your one brain cell.
+ A flashcard app for your single brain cell.
