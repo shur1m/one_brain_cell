@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../utils/pageCreator.dart';
 
@@ -11,10 +13,14 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
-  bool _someSetting = true;
+  Box settingsBox = Hive.box('settings');
 
   @override
   Widget build(BuildContext context) {
+    bool _isMulticellular = settingsBox.containsKey('multicellular')
+        ? settingsBox.get('multicellular')
+        : false;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -28,11 +34,11 @@ class _SettingsTabState extends State<SettingsTab> {
               title: Text('I am multicellular',
                   style: Theme.of(context).textTheme.bodyText1),
               trailing: CupertinoSwitch(
-                value: _someSetting,
+                value: _isMulticellular,
                 activeColor: Theme.of(context).secondaryHeaderColor,
                 onChanged: (bool value) {
                   setState(() {
-                    _someSetting = value;
+                    settingsBox.put('multicellular', value);
                   });
                 },
               ),
