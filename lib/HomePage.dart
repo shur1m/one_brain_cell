@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:one_brain_cell/navBarTabs/AddTab.dart';
-import 'package:one_brain_cell/navBarTabs/HomeTab.dart';
-import 'package:one_brain_cell/navBarTabs/ListsTab.dart';
-import 'package:one_brain_cell/navBarTabs/SettingsTab.dart';
+import 'package:one_brain_cell/navBarTabs/addTab.dart';
+import 'package:one_brain_cell/navBarTabs/homeTab.dart';
+import 'package:one_brain_cell/navBarTabs/listsTab.dart';
+import 'package:one_brain_cell/navBarTabs/settingsTab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

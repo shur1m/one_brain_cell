@@ -47,8 +47,10 @@ class PageCreator {
         alignment: Alignment.center,
         children: [
           Text(displayPercentage.toString() + '%',
-              style:
-                  TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
           CustomPaint(
             size: Size(size, size),
             painter: Arc(1.0, Colors.grey.shade200, stroke),
