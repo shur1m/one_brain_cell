@@ -18,12 +18,12 @@ class MyApp extends StatelessWidget {
         cardColor: Color.fromARGB(255, 76, 76, 76),
         textTheme: const TextTheme(
           headline1: TextStyle(
-              fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 34.0, fontWeight: FontWeight.bold, color: Colors.black),
           headline2: TextStyle(
-              fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 26.0, fontWeight: FontWeight.bold, color: Colors.black),
           bodyText1: TextStyle(fontSize: 17, fontFamily: 'Hind'),
           caption:
-              TextStyle(fontSize: 20, fontFamily: 'Hind', color: Colors.white),
+              TextStyle(fontSize: 17, fontFamily: 'Hind', color: Colors.white),
         ),
         iconTheme: IconThemeData(color: secondary),
       ),

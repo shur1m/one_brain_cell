@@ -6,7 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   await Hive.initFlutter();
-  Box settingsBox = await Hive.openBox('settings');
+  await Hive.openBox('settings');
+  await Hive.openBox('dir');
 
   runApp(MyApp());
 }

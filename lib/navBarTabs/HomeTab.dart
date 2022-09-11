@@ -44,7 +44,8 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(bottom: 5),
-                  child: PageCreator.makeTitle('One Brain Cell', context),
+                  child:
+                      PageCreator.makeTitle('Single-celled Progress', context),
                 ),
                 Card(
                     elevation: 5,
@@ -58,9 +59,9 @@ class _HomeTabState extends State<HomeTab> {
                           PageCreator.makeCirclePercentage(
                               _reviewPercentage,
                               Theme.of(context).secondaryHeaderColor,
-                              160,
+                              140,
                               15,
-                              22),
+                              17),
                           Flexible(
                               child: Text(
                             'Keep reviewing and you might get another!',
@@ -79,6 +80,7 @@ class _HomeTabState extends State<HomeTab> {
                             children: [
                               Text('Total Cards Learned',
                                   style: Theme.of(context).textTheme.headline2),
+                              Padding(padding: EdgeInsets.only(bottom: 10)),
                               Container(
                                   height: 200,
                                   child:
