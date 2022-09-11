@@ -38,10 +38,10 @@ class AreaAndLineChart extends StatelessWidget {
   /// Create one series with sample hard coded data.
   static List<charts.Series<CardCount, int>> _getStudyData(context) {
     final myFakeDesktopData = [
-      new CardCount(0, 100),
-      new CardCount(1, 123),
-      new CardCount(2, 121),
-      new CardCount(3, 120),
+      CardCount(0, 100),
+      CardCount(1, 123),
+      CardCount(2, 121),
+      CardCount(3, 120),
     ];
 
     return [
