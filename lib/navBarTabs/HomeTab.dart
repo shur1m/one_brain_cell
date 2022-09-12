@@ -78,8 +78,14 @@ class _HomeTabState extends State<HomeTab> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Total Cards Learned',
-                                  style: Theme.of(context).textTheme.headline2),
+                              Padding(
+                                  padding: EdgeInsets.only(top: 10, bottom: 3),
+                                  child: Text('Total Cards Learned',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline2)),
+                              Text('We can\'t believe you\'ve come this far',
+                                  style: Theme.of(context).textTheme.subtitle1),
                               Padding(padding: EdgeInsets.only(bottom: 10)),
                               Container(
                                   height: 200,

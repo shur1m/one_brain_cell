@@ -17,6 +17,7 @@ class ListsTab extends StatefulWidget {
 
 class _ListsTabState extends State<ListsTab> {
   Box dirBox = Hive.box('dir');
+
   late HiveList branches;
   late CardCollection root;
 
@@ -45,6 +46,30 @@ class _ListsTabState extends State<ListsTab> {
                 _createFolder(text);
               },
             ));
+    print(dirBox.length);
+  }
+
+  void _displayCreateActionSheet(BuildContext context) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: ((context) => CupertinoActionSheet(
+              actions: [
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _displayCreateFolderAlert(context);
+                    },
+                    child: Text('Create Folder')),
+                CupertinoActionSheetAction(
+                    onPressed: () {}, child: Text('Create List'))
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )));
   }
 
   //add folder to root Hivelist and dirbox
@@ -108,7 +133,7 @@ class _ListsTabState extends State<ListsTab> {
                             padding: EdgeInsets.only(right: 10, bottom: 11),
                             child: IconButton(
                                 onPressed: () =>
-                                    _displayCreateFolderAlert(context),
+                                    _displayCreateActionSheet(context),
                                 icon: Icon(
                                   Icons.add,
                                   color: Theme.of(context).secondaryHeaderColor,
