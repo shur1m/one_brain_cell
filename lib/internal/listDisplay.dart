@@ -1,40 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:one_brain_cell/internal/listDisplay.dart';
-
 import 'package:one_brain_cell/utils/alertDialogueWithTextField.dart';
 import 'package:one_brain_cell/utils/pageCreator.dart';
 import 'package:one_brain_cell/utils/store/cardCollection.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class ListsTab extends StatefulWidget {
-  const ListsTab({Key? key}) : super(key: key);
+class ListDisplay extends StatefulWidget {
+  const ListDisplay({Key? key, required this.currentCollection})
+      : super(key: key);
+  final CardCollection currentCollection;
 
   @override
-  _ListsTabState createState() => _ListsTabState();
+  _ListDisplayState createState() => _ListDisplayState();
 }
 
-class _ListsTabState extends State<ListsTab> {
+class _ListDisplayState extends State<ListDisplay> {
+  late CardCollection cur = widget.currentCollection;
+  late HiveList branches = cur.contents;
   Box dirBox = Hive.box('dir');
-  late HiveList branches;
-  late CardCollection root;
-
-  @override
-  void initState() {
-    super.initState();
-    if (!dirBox.containsKey(0)) {
-      dirBox.put(0, CardCollection("root", false, HiveList(dirBox)));
-    }
-    root = dirBox.get(0);
-    branches = root.contents;
-  }
 
   //display view of folder or list when pressed on
-  void _displayList(CardCollection cur, BuildContext context) {
+  void _displayList(CardCollection next, BuildContext context) {
     //display the view of the list pressed
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ListDisplay(currentCollection: cur)));
+        builder: (context) => ListDisplay(currentCollection: next)));
   }
 
   void _displayCreateFolderAlert(BuildContext context) {
@@ -53,8 +43,11 @@ class _ListsTabState extends State<ListsTab> {
     setState(() {
       CardCollection newFolder = CardCollection(title, false, HiveList(dirBox));
       dirBox.add(newFolder);
-      root.contents.add(newFolder);
-      root.save();
+      cur.contents.add(newFolder);
+      cur.save();
+
+      //print out root contents
+      print(cur.contents);
     });
   }
 
@@ -64,13 +57,11 @@ class _ListsTabState extends State<ListsTab> {
     });
   }
 
+  //deal with possibility of both list and folder
   @override
   Widget build(BuildContext context) {
-    //if no root folder, add it
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
-      //Contains title and list of branches/ lists
       body: SafeArea(
         child: Scrollbar(
             //make this reusable means Function(list, Title, functionwhenpressed)
@@ -91,7 +82,7 @@ class _ListsTabState extends State<ListsTab> {
 
             HiveObjectMixin tmp = branches.removeAt(oldIndex);
             branches.insert(newIndex, tmp);
-            root.save();
+            cur.save();
           }),
           itemBuilder: (context, index) {
             if (index == 0) {
@@ -102,17 +93,15 @@ class _ListsTabState extends State<ListsTab> {
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        PageCreator.makeTitle('Flashcard Lists', context),
-                        Expanded(child: Container()),
-                        Padding(
-                            padding: EdgeInsets.only(right: 10, bottom: 11),
-                            child: IconButton(
-                                onPressed: () =>
-                                    _displayCreateFolderAlert(context),
-                                icon: Icon(
-                                  Icons.add,
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                ))),
+                        Expanded(
+                            child: PageCreator.makeTitleWithBack(
+                                cur.collectionName, context)),
+                        IconButton(
+                            onPressed: () => _displayCreateFolderAlert(context),
+                            icon: Icon(
+                              Icons.add,
+                              color: Theme.of(context).secondaryHeaderColor,
+                            )),
                       ]));
             }
             int i = index - 1;

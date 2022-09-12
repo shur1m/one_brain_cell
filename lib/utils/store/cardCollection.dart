@@ -15,4 +15,22 @@ class CardCollection extends HiveObject {
 
   CardCollection(this.collectionName, this.isList, this.contents);
   String toString() => collectionName;
+
+  //override delete to delete all folders inside
+  @override
+  Future<void> delete() {
+    //call delete for all children
+    _deleteContents();
+    return super.delete();
+  }
+
+  void _deleteContents() async {
+    while (contents.isNotEmpty) {
+      if (isList) {
+        //to do later (delete keys from listbox)
+      } else {
+        contents.last.delete();
+      }
+    }
+  }
 }

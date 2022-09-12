@@ -14,28 +14,25 @@ class PageCreator {
   }
 
   static Widget makeTitleWithBack(String title, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15, left: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios_new_rounded)),
-          Flexible(
-            child: Container(
-                padding: EdgeInsets.only(left: 1.2),
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.headline2,
-                  overflow: TextOverflow.ellipsis,
-                )),
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new_rounded)),
+        Flexible(
+          child: Container(
+              padding: EdgeInsets.only(left: 1.2),
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.headline2,
+                overflow: TextOverflow.ellipsis,
+              )),
+        ),
+      ],
     );
   }
 
