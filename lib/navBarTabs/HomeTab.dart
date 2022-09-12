@@ -84,11 +84,13 @@ class _HomeTabState extends State<HomeTab> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline2)),
-                              Text('We can\'t believe you\'ve come this far',
-                                  style: Theme.of(context).textTheme.subtitle1),
+                              Text(
+                                'We can\'t believe you\'ve come this far!',
+                                style: Theme.of(context).textTheme.subtitle1,
+                                softWrap: true,
+                              ),
                               Padding(padding: EdgeInsets.only(bottom: 10)),
-                              Container(
-                                  height: 200,
+                              Expanded(
                                   child:
                                       AreaAndLineChart.withStudyData(context)),
                             ]))),

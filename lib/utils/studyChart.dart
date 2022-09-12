@@ -40,8 +40,11 @@ class AreaAndLineChart extends StatelessWidget {
     final myFakeDesktopData = [
       CardCount(0, 100),
       CardCount(1, 123),
-      CardCount(2, 121),
-      CardCount(3, 120),
+      CardCount(2, 137),
+      CardCount(3, 153),
+      CardCount(4, 175),
+      CardCount(5, 212),
+      CardCount(6, 214),
     ];
 
     return [
