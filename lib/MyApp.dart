@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: secondary,
         scaffoldBackgroundColor: Colors.white,
         cardColor: Color.fromARGB(255, 76, 76, 76),
+        buttonColor: Color.fromARGB(255, 155, 120, 216),
         listTileTheme: ListTileThemeData(),
         textTheme: const TextTheme(
           headline1: TextStyle(
