@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../utils/pageCreator.dart';
+import 'package:one_brain_cell/utils/pageCreator.dart';
 
 class SettingsTab extends StatefulWidget {
   const SettingsTab({Key? key}) : super(key: key);
