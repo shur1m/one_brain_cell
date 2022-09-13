@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:one_brain_cell/internal/listDisplay.dart';
+import 'package:one_brain_cell/internal/cardListDisplay.dart';
+import 'package:one_brain_cell/internal/folderDisplay.dart';
 
 import 'package:one_brain_cell/utils/alertDialogueWithTextField.dart';
 import 'package:one_brain_cell/utils/pageCreator.dart';
@@ -32,18 +33,26 @@ class _ListsTabState extends State<ListsTab> {
   }
 
   //display view of folder or list when pressed on
-  void _displayList(CardCollection cur, BuildContext context) {
+  void _displayFolder(CardCollection next, BuildContext context) {
     //display the view of the list pressed
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ListDisplay(currentCollection: cur)));
+        builder: (context) => FolderDisplay(currentCollection: next)));
   }
 
-  void _displayCreateFolderAlert(BuildContext context) {
+  void _displayCardList(CardCollection next, BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CardListDisplay(
+              currentCollection: next,
+            )));
+  }
+
+  void _displayCreateCollectionAlert(BuildContext context, bool isList) {
     showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => AlertDialogueWithTextField(
+              title: isList ? 'Create List' : 'Create Folder',
               doneFunction: (String text) {
-                _createFolder(text);
+                _createCollection(text, isList);
               },
             ));
     print(dirBox.length);
@@ -57,11 +66,15 @@ class _ListsTabState extends State<ListsTab> {
                 CupertinoActionSheetAction(
                     onPressed: () {
                       Navigator.pop(context);
-                      _displayCreateFolderAlert(context);
+                      _displayCreateCollectionAlert(context, false);
                     },
                     child: Text('Create Folder')),
                 CupertinoActionSheetAction(
-                    onPressed: () {}, child: Text('Create List'))
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _displayCreateCollectionAlert(context, true);
+                    },
+                    child: Text('Create List'))
               ],
               cancelButton: CupertinoActionSheetAction(
                 child: Text('Cancel'),
@@ -73,10 +86,11 @@ class _ListsTabState extends State<ListsTab> {
   }
 
   //add folder to root Hivelist and dirbox
-  void _createFolder(String title) {
+  void _createCollection(String title, bool isList) {
     //add folder to root and update screen
     setState(() {
-      CardCollection newFolder = CardCollection(title, false, HiveList(dirBox));
+      CardCollection newFolder =
+          CardCollection(title, isList, HiveList(dirBox));
       dirBox.add(newFolder);
       root.contents.add(newFolder);
       root.save();
@@ -169,7 +183,9 @@ class _ListsTabState extends State<ListsTab> {
                       : Icon(Icons.folder,
                           color: Theme.of(context).iconTheme.color),
                   onTap: () {
-                    _displayList(branches[i] as CardCollection, context);
+                    CardCollection tab = branches[i] as CardCollection;
+                    if (!tab.isList) _displayFolder(tab, context);
+                    if (tab.isList) _displayCardList(tab, context);
                   },
                   title: Text(branches[i].toString(),
                       style: Theme.of(context).textTheme.bodyText1),

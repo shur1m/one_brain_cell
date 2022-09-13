@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 
 class AlertDialogueWithTextField extends StatefulWidget {
   late Function(String) doneFunction;
+  late String title;
 
-  AlertDialogueWithTextField({Key? key, required this.doneFunction})
+  AlertDialogueWithTextField(
+      {Key? key, required this.doneFunction, required this.title})
       : super(key: key);
 
   @override
@@ -19,7 +21,7 @@ class _AlertDialogueWithTextFieldState
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
         title: Padding(
-            padding: EdgeInsets.only(bottom: 10), child: Text('Create Folder')),
+            padding: EdgeInsets.only(bottom: 10), child: Text(widget.title)),
         content: CupertinoTextField(
           controller: _controller,
           placeholder: 'Folder Name',
