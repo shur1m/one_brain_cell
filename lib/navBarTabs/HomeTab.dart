@@ -43,7 +43,7 @@ class _HomeTabState extends State<HomeTab> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 5),
+                  padding: EdgeInsets.only(bottom: 12),
                   child:
                       PageCreator.makeTitle('Single-celled Progress', context),
                 ),

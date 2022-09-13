@@ -28,6 +28,7 @@ void main() async {
 
   await Hive.openBox('settings');
   await Hive.openBox('dir');
+  await Hive.openLazyBox('idlists');
 
   runApp(MyApp());
 }

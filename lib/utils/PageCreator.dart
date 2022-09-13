@@ -4,7 +4,7 @@ import 'dart:math' as math;
 class PageCreator {
   static Widget makeTitle(String title, BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 15, left: 8),
+        padding: const EdgeInsets.only(left: 8),
         child: Text(
           title,
           style: Theme.of(context).textTheme.headline1,

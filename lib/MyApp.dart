@@ -16,11 +16,12 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: secondary,
         scaffoldBackgroundColor: Colors.white,
         cardColor: Color.fromARGB(255, 76, 76, 76),
+        listTileTheme: ListTileThemeData(),
         textTheme: const TextTheme(
           headline1: TextStyle(
-              fontSize: 34.0, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.black),
           headline2: TextStyle(
-              fontSize: 26.0, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black),
           subtitle1: TextStyle(
               fontSize: 19, color: Color.fromARGB(255, 154, 154, 154)),
           bodyText1: TextStyle(fontSize: 17, fontFamily: 'Hind'),

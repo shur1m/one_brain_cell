@@ -143,15 +143,12 @@ class _ListsTabState extends State<ListsTab> {
                       children: [
                         PageCreator.makeTitle('Flashcard Lists', context),
                         Expanded(child: Container()),
-                        Padding(
-                            padding: EdgeInsets.only(right: 10, bottom: 11),
-                            child: IconButton(
-                                onPressed: () =>
-                                    _displayCreateActionSheet(context),
-                                icon: Icon(
-                                  Icons.add,
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                ))),
+                        IconButton(
+                            onPressed: () => _displayCreateActionSheet(context),
+                            icon: Icon(
+                              Icons.add,
+                              color: Theme.of(context).secondaryHeaderColor,
+                            )),
                       ]));
             }
             int i = index - 1;

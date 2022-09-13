@@ -173,7 +173,6 @@ class _FolderDisplayState extends State<FolderDisplay> {
                     CardCollection tab = branches[i] as CardCollection;
                     if (!tab.isList) _displayFolder(tab, context);
                     if (tab.isList) _displayCardList(tab, context);
-                    _displayCardList(tab, context);
                   },
                   title: Text(branches[i].toString(),
                       style: Theme.of(context).textTheme.bodyText1),
