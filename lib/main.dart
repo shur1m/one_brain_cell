@@ -30,5 +30,9 @@ void main() async {
   await Hive.openBox('dir');
   await Hive.openBox('idlists');
 
+  //resetting the storage for the app
+  // await database.execute("delete from Flashcards");
+  // await Hive.box('idlists').clear();
+
   runApp(MyApp());
 }
