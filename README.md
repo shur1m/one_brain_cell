@@ -1,2 +1,2 @@
-# one_brain_cell
- A flashcard app for your single brain cell. Keep it up and we might have two.
+# One Brain Cell
+A flashcard app for single celled organisms. Written for iOS with flutter and a good sense of humor.
