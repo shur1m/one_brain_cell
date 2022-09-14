@@ -15,11 +15,11 @@ void main() async {
   var databasesPath = await getDatabasesPath();
   String path = join(databasesPath, 'flashcards.db');
 
-  Database database = await openDatabase(path, version: 1,
+  Database database = await openDatabase(path, version: 2,
       onCreate: (Database db, int version) async {
     // When creating the db, create the table
     await db.execute(
-        'CREATE TABLE Flashcards (id INTEGER PRIMARY KEY, front TEXT, back TEXT, status TEXT)');
+        'CREATE TABLE Flashcards (id INTEGER PRIMARY KEY, front TEXT, back TEXT, status INTEGER)');
   });
 
   //hive db initialization
@@ -28,7 +28,7 @@ void main() async {
 
   await Hive.openBox('settings');
   await Hive.openBox('dir');
-  await Hive.openLazyBox('idlists');
+  await Hive.openBox('idlists');
 
   runApp(MyApp());
 }

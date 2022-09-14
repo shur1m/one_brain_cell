@@ -77,10 +77,10 @@ class _FolderDisplayState extends State<FolderDisplay> {
   void _createCollection(String title, bool isList) {
     //add folder to root and update screen
     setState(() {
-      CardCollection newFolder =
-          CardCollection(title, isList, HiveList(dirBox));
-      dirBox.add(newFolder);
-      cur.contents.add(newFolder);
+      CardCollection newCollection = CardCollection(
+          title, isList, HiveList(isList ? dirBox : Hive.box('idlists')));
+      dirBox.add(newCollection);
+      cur.contents.add(newCollection);
       cur.save();
 
       //print out root contents

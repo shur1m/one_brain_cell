@@ -89,10 +89,10 @@ class _ListsTabState extends State<ListsTab> {
   void _createCollection(String title, bool isList) {
     //add folder to root and update screen
     setState(() {
-      CardCollection newFolder =
-          CardCollection(title, isList, HiveList(dirBox));
-      dirBox.add(newFolder);
-      root.contents.add(newFolder);
+      CardCollection newCollection = CardCollection(
+          title, isList, HiveList(isList ? Hive.box('idlists') : dirBox));
+      dirBox.add(newCollection);
+      root.contents.add(newCollection);
       root.save();
     });
   }

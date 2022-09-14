@@ -36,6 +36,28 @@ class PageCreator {
     );
   }
 
+  static Widget makeCircularTextField(
+      {required BuildContext context,
+      required TextEditingController? controller,
+      required String placeholder,
+      int minLines = 8}) {
+    return TextField(
+      controller: controller,
+      style: Theme.of(context).textTheme.bodyText1,
+      decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(
+                width: 2.0, color: Theme.of(context).secondaryHeaderColor),
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          hintStyle: TextStyle(color: Colors.grey),
+          hintText: placeholder),
+      maxLines: null,
+      minLines: 8,
+    );
+  }
+
   static Widget makeCirclePercentage(double percentage, Color color,
       double size, double stroke, double fontSize) {
     int displayPercentage = (percentage * 100).toInt();
