@@ -13,9 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> _menuNames = ['Home', 'Lists', 'Add', 'Settings'];
-
-  List<Widget> _pages = [HomeTab(), ListsTab(), AddTab(), SettingsTab()];
+  final List<String> _menuNames = ['Home', 'Lists', 'Add', 'Settings'];
+  final List<Widget> _pages = [HomeTab(), ListsTab(), AddTab(), SettingsTab()];
 
   int _selectedIndex = 0;
 
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black,
         ),
         child: Padding(

@@ -10,7 +10,7 @@ class AreaAndLineChart extends StatelessWidget {
 
   /// Creates a [LineChart] with sample data and no transition.
   factory AreaAndLineChart.withStudyData(BuildContext context) {
-    return new AreaAndLineChart(
+    return AreaAndLineChart(
       _getStudyData(context),
       // Disable animations for image tests.
       animate: false,
