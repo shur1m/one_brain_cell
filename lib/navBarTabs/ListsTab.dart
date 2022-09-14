@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:one_brain_cell/internal/cardListDisplay.dart';
-import 'package:one_brain_cell/internal/folderDisplay.dart';
 
 import 'package:one_brain_cell/utils/alertDialogueWithTextField.dart';
 import 'package:one_brain_cell/utils/pageCreator.dart';
 import 'package:one_brain_cell/utils/store/cardCollection.dart';
 
 class ListsTab extends StatefulWidget {
-  const ListsTab({Key? key}) : super(key: key);
+  ListsTab({Key? key, CardCollection? this.currentCollection})
+      : super(key: key);
+
+  CardCollection? currentCollection;
 
   @override
   _ListsTabState createState() => _ListsTabState();
@@ -21,22 +23,42 @@ class _ListsTabState extends State<ListsTab> {
 
   late HiveList branches;
   late CardCollection root;
+  late bool isRootFolder;
 
   @override
   void initState() {
     super.initState();
-    if (!dirBox.containsKey(0)) {
-      dirBox.put(0, CardCollection("root", false, HiveList(dirBox)));
+
+    //if this is the top/root folder, we should do these checks
+    if (widget.currentCollection == null) {
+      isRootFolder = true;
+      if (!dirBox.containsKey(0)) {
+        dirBox.put(0, CardCollection("root", false, HiveList(dirBox)));
+      }
+      root = dirBox.get(0);
+
+      //if this is inner folder, just set it to passed value
+    } else {
+      isRootFolder = false;
+      root = widget.currentCollection as CardCollection;
     }
-    root = dirBox.get(0);
+
     branches = root.contents;
+  }
+
+  Widget _getTitleWidget() {
+    if (isRootFolder) {
+      return PageCreator.makeTitle('Flashcard Lists', context);
+    }
+
+    return PageCreator.makeTitleWithBack(root.collectionName, context);
   }
 
   //display view of folder or list when pressed on
   void _displayFolder(CardCollection next, BuildContext context) {
     //display the view of the list pressed
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => FolderDisplay(currentCollection: next)));
+        builder: (context) => ListsTab(currentCollection: next)));
   }
 
   void _displayCardList(CardCollection next, BuildContext context) {
@@ -47,7 +69,7 @@ class _ListsTabState extends State<ListsTab> {
   }
 
   void _displayCreateCollectionAlert(BuildContext context, bool isList) {
-    showCupertinoModalPopup<void>(
+    showCupertinoDialog<void>(
         context: context,
         builder: (BuildContext context) => AlertDialogueWithTextField(
               title: isList ? 'Create List' : 'Create Folder',
@@ -87,6 +109,26 @@ class _ListsTabState extends State<ListsTab> {
 
   //add folder to root Hivelist and dirbox
   void _createCollection(String title, bool isList) {
+    //ensure no duplicate names for lists
+    if (isList && Hive.box('idlists').containsKey(title)) {
+      //TODO
+      showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('Choose another Name'),
+              content: Text('Flashcard lists cannot have the same name.'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text('OK'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          });
+      return;
+    }
+
     //add folder to root and update screen
     setState(() {
       CardCollection newCollection = CardCollection(
@@ -99,6 +141,8 @@ class _ListsTabState extends State<ListsTab> {
       if (isList) {
         Hive.box('idlists').put(title, <int>[]);
       }
+
+      print('listsTab.dart: This folder contains ${root.contents}');
     });
   }
 
@@ -146,8 +190,7 @@ class _ListsTabState extends State<ListsTab> {
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        PageCreator.makeTitle('Flashcard Lists', context),
-                        Expanded(child: Container()),
+                        Expanded(child: _getTitleWidget()),
                         IconButton(
                             onPressed: () {
                               print('Number of Collections: ${dirBox.length}');

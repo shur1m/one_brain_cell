@@ -29,8 +29,8 @@ class _AlertDialogueWithTextFieldState
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
               onPressed: () {
-                widget.doneFunction(_controller.text);
                 Navigator.pop(context);
+                widget.doneFunction(_controller.text);
               },
               isDefaultAction: true,
               child: Text(
