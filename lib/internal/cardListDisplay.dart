@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:path/path.dart' as Path;
 import 'package:sqflite/sqflite.dart';
 
+import 'package:one_brain_cell/utils/sqlHelper.dart';
 import 'package:one_brain_cell/utils/pageCreator.dart';
 import 'package:one_brain_cell/utils/store/cardCollection.dart';
 
@@ -28,15 +28,8 @@ class _CardListDisplayState extends State<CardListDisplay> {
   TextEditingController frontTextController = TextEditingController();
   TextEditingController backTextController = TextEditingController();
 
-  Future<Database> _getDatabase(String dbName) async {
-    String databasesPath = await getDatabasesPath();
-    String path = Path.join(databasesPath, dbName);
-    Database db = await openDatabase(path, version: 2);
-    return db;
-  }
-
   void _createFlashcard(String frontText, String backText) async {
-    Database cardDatabase = await _getDatabase('flashcards.db');
+    Database cardDatabase = await SqlHelper.getDatabase('flashcards.db');
 
     int rowid = await cardDatabase.insert(
         'Flashcards', {'front': frontText, 'back': backText, 'status': 0},
@@ -48,6 +41,8 @@ class _CardListDisplayState extends State<CardListDisplay> {
     idList.add(rowid);
     idListBox.put(widget.currentCollection.collectionName, idList);
 
+    //delete this later
+    print('___ cardListDisplay.dart ___');
     print(await cardDatabase.rawQuery('SELECT * FROM Flashcards'));
     print(idListBox.get(widget.currentCollection.collectionName));
   }

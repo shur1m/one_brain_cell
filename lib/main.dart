@@ -33,6 +33,7 @@ void main() async {
   //resetting the storage for the app
   // await database.execute("delete from Flashcards");
   // await Hive.box('idlists').clear();
+  // await Hive.box('dir').clear();
 
   runApp(MyApp());
 }

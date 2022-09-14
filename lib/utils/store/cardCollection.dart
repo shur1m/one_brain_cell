@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+import 'package:one_brain_cell/utils/sqlHelper.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 part 'cardCollection.g.dart';
 
@@ -25,12 +27,23 @@ class CardCollection extends HiveObject {
   }
 
   void _deleteContents() async {
+    //if this collection is list, we need to delete
+    //everything inside it as well as self from idlist box
+    if (isList) {
+      Box idListBox = Hive.box('idlists');
+      List<int> idList = idListBox.get(collectionName);
+
+      //delete all cards inside from database
+      Database db = await SqlHelper.getDatabase('flashcards.db');
+      db.execute('DELETE FROM Flashcards WHERE ID IN (${idList.join(', ')})');
+
+      //delete idlists from box
+      idListBox.delete(collectionName);
+      return;
+    }
+
     while (contents.isNotEmpty) {
-      if (isList) {
-        //to do later (delete keys from listbox)
-      } else {
-        contents.last.delete();
-      }
+      contents.last.delete();
     }
   }
 }

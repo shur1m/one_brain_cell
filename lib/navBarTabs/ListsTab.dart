@@ -94,6 +94,11 @@ class _ListsTabState extends State<ListsTab> {
       dirBox.add(newCollection);
       root.contents.add(newCollection);
       root.save();
+
+      //place empty id list into idlists box
+      if (isList) {
+        Hive.box('idlists').put(title, <int>[]);
+      }
     });
   }
 
@@ -144,7 +149,10 @@ class _ListsTabState extends State<ListsTab> {
                         PageCreator.makeTitle('Flashcard Lists', context),
                         Expanded(child: Container()),
                         IconButton(
-                            onPressed: () => _displayCreateActionSheet(context),
+                            onPressed: () {
+                              print('Number of Collections: ${dirBox.length}');
+                              return _displayCreateActionSheet(context);
+                            },
                             icon: Icon(
                               Icons.add,
                               color: Theme.of(context).secondaryHeaderColor,

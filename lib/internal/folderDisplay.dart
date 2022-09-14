@@ -78,18 +78,24 @@ class _FolderDisplayState extends State<FolderDisplay> {
     //add folder to root and update screen
     setState(() {
       CardCollection newCollection = CardCollection(
-          title, isList, HiveList(isList ? dirBox : Hive.box('idlists')));
+          title, isList, HiveList(isList ? Hive.box('idlists') : dirBox));
       dirBox.add(newCollection);
       cur.contents.add(newCollection);
       cur.save();
 
+      //place empty id list into idlists box
+      if (isList) {
+        Hive.box('idlists').put(title, <int>[]);
+      }
+
       //print out root contents
-      print(cur.contents);
+      print('folderDisplay.dart: This folder contains ${cur.contents}');
     });
   }
 
-  void _deleteCollection(int i) {
+  void _deleteCollection(int i) async {
     setState(() {
+      //delete from box, which also deletes from hivelist
       branches[i].delete();
     });
   }
