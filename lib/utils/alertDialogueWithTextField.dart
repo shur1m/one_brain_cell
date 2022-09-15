@@ -28,6 +28,15 @@ class _AlertDialogueWithTextFieldState
         ),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(
+            onPressed: () {
+              setState(() {
+                Navigator.pop(context);
+              });
+            },
+            isDefaultAction: false,
+            child: const Text('Cancel'),
+          ),
+          CupertinoDialogAction(
               onPressed: () {
                 Navigator.pop(context);
                 widget.doneFunction(_controller.text);
@@ -36,15 +45,6 @@ class _AlertDialogueWithTextFieldState
               child: Text(
                 'Done',
               )),
-          CupertinoDialogAction(
-            onPressed: () {
-              setState(() {
-                Navigator.pop(context);
-              });
-            },
-            isDefaultAction: false,
-            child: const Text('Cancel'),
-          )
         ]);
   }
 

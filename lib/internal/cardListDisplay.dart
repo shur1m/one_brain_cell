@@ -65,12 +65,12 @@ class _CardListDisplayState extends State<CardListDisplay> {
     idList.add(rowid);
     idListBox.put(widget.currentCollection.collectionName, idList);
 
-    //delete this later
-    print('___ cardListDisplay.dart ___');
-    print(
-        'Everything in database: ${await cardDatabase.rawQuery('SELECT * FROM Flashcards')}');
-    print(
-        'all cards in this list: ${idListBox.get(widget.currentCollection.collectionName)}');
+    //for debugging database
+    // print('___ cardListDisplay.dart ___');
+    // print(
+    //     'Everything in database: ${await cardDatabase.rawQuery('SELECT * FROM Flashcards')}');
+    // print(
+    //     'all cards in this list: ${idListBox.get(widget.currentCollection.collectionName)}');
 
     //set state of list because updated
     setState(() {
@@ -122,6 +122,30 @@ class _CardListDisplayState extends State<CardListDisplay> {
                       style: TextStyle(color: Theme.of(context).buttonColor)),
                   padding: const EdgeInsets.all(0),
                   onPressed: () {
+                    //ensure that there are front and back fields
+                    if (frontTextController.text.isEmpty ||
+                        backTextController.text.isEmpty) {
+                      showCupertinoDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Padding(
+                                  padding: EdgeInsets.only(bottom: 5),
+                                  child: Text('Empty Text Fields')),
+                              content: Text(
+                                  'Fun fact: You can\'t learn anything from an empty flashcard.'),
+                              actions: [
+                                CupertinoDialogAction(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    })
+                              ],
+                            );
+                          });
+                      return;
+                    }
+
                     setState(() {
                       //this should add entry to list in db
                       //then add rowid to hivelist of CardCollection (curcardlist)

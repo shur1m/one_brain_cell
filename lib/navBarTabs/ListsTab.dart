@@ -77,7 +77,6 @@ class _ListsTabState extends State<ListsTab> {
                 _createCollection(text, isList);
               },
             ));
-    print(dirBox.length);
   }
 
   void _displayCreateActionSheet(BuildContext context) {
@@ -111,7 +110,6 @@ class _ListsTabState extends State<ListsTab> {
   void _createCollection(String title, bool isList) {
     //ensure no duplicate names for lists
     if (isList && Hive.box('idlists').containsKey(title)) {
-      //TODO
       showCupertinoDialog(
           context: context,
           builder: (context) {
@@ -141,8 +139,6 @@ class _ListsTabState extends State<ListsTab> {
       if (isList) {
         Hive.box('idlists').put(title, <int>[]);
       }
-
-      print('listsTab.dart: This folder contains ${root.contents}');
     });
   }
 
@@ -160,74 +156,67 @@ class _ListsTabState extends State<ListsTab> {
 
       //Contains title and list of branches/ lists
       body: SafeArea(
-        child: Scrollbar(
-            //make this reusable means Function(list, Title, functionwhenpressed)
-            child: ReorderableListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: branches.length + 1,
-          onReorder: ((oldIndex, newIndex) {
-            --oldIndex;
-            --newIndex;
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Padding(
+              padding: EdgeInsets.only(left: 16, top: 16, right: 16),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Expanded(child: _getTitleWidget()),
+                IconButton(
+                    onPressed: () {
+                      print('Number of Collections: ${dirBox.length}');
+                      return _displayCreateActionSheet(context);
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: Theme.of(context).secondaryHeaderColor,
+                    )),
+              ])),
+          Expanded(
+              //make this reusable means Function(list, Title, functionwhenpressed)
+              child: ReorderableListView.builder(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            itemCount: branches.length,
+            onReorder: ((oldIndex, newIndex) {
+              if (newIndex >= branches.length) {
+                newIndex = branches.length - 1;
+              }
 
-            if (newIndex >= branches.length) {
-              newIndex = branches.length - 1;
-            }
+              if (newIndex < 0) {
+                newIndex = 0;
+              }
 
-            if (newIndex < 0) {
-              newIndex = 0;
-            }
-
-            HiveObjectMixin tmp = branches.removeAt(oldIndex);
-            branches.insert(newIndex, tmp);
-            root.save();
-          }),
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              //Gesture Detector prevents reordering for first index
-              return GestureDetector(
-                  key: ValueKey(-1),
-                  onLongPress: () {},
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(child: _getTitleWidget()),
-                        IconButton(
-                            onPressed: () {
-                              print('Number of Collections: ${dirBox.length}');
-                              return _displayCreateActionSheet(context);
-                            },
-                            icon: Icon(
-                              Icons.add,
-                              color: Theme.of(context).secondaryHeaderColor,
-                            )),
-                      ]));
-            }
-            int i = index - 1;
-            return Dismissible(
-                key: ObjectKey(branches[i]),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) {
-                  _deleteCollection(i);
-                },
-                background: PageCreator.makeDismissibleBackground(context),
-                child: ListTile(
-                  leading: (branches[i] as CardCollection).isList
-                      ? Icon(
-                          Icons.list,
-                          color: Theme.of(context).iconTheme.color,
-                        )
-                      : Icon(Icons.folder,
-                          color: Theme.of(context).iconTheme.color),
-                  onTap: () {
-                    CardCollection tab = branches[i] as CardCollection;
-                    if (!tab.isList) _displayFolder(tab, context);
-                    if (tab.isList) _displayCardList(tab, context);
+              HiveObjectMixin tmp = branches.removeAt(oldIndex);
+              branches.insert(newIndex, tmp);
+              root.save();
+            }),
+            itemBuilder: (context, i) {
+              return Dismissible(
+                  key: ObjectKey(branches[i]),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    _deleteCollection(i);
                   },
-                  title: Text(branches[i].toString(),
-                      style: Theme.of(context).textTheme.bodyText1),
-                ));
-          },
-        )),
+                  background: PageCreator.makeDismissibleBackground(context),
+                  child: ListTile(
+                    leading: (branches[i] as CardCollection).isList
+                        ? Icon(
+                            Icons.list,
+                            color: Theme.of(context).iconTheme.color,
+                          )
+                        : Icon(Icons.folder,
+                            color: Theme.of(context).iconTheme.color),
+                    onTap: () {
+                      CardCollection tab = branches[i] as CardCollection;
+                      if (!tab.isList) _displayFolder(tab, context);
+                      if (tab.isList) _displayCardList(tab, context);
+                    },
+                    title: Text(branches[i].toString(),
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ));
+            },
+          ))
+        ]),
       ),
     );
   }
