@@ -209,19 +209,7 @@ class _ListsTabState extends State<ListsTab> {
                 onDismissed: (direction) {
                   _deleteCollection(i);
                 },
-                background: Scaffold(
-                  backgroundColor: Colors.red.shade200,
-                  body: Center(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.delete,
-                          color: Theme.of(context).scaffoldBackgroundColor),
-                      Padding(padding: EdgeInsets.only(right: 14)),
-                    ],
-                  )),
-                ),
+                background: PageCreator.makeDismissibleBackground(context),
                 child: ListTile(
                   leading: (branches[i] as CardCollection).isList
                       ? Icon(

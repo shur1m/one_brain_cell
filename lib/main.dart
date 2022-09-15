@@ -19,7 +19,7 @@ void main() async {
       onCreate: (Database db, int version) async {
     // When creating the db, create the table
     await db.execute(
-        'CREATE TABLE Flashcards (id INTEGER PRIMARY KEY, front TEXT, back TEXT, status INTEGER)');
+        'CREATE TABLE Flashcards (id INTEGER PRIMARY KEY, front TEXT, back TEXT, status INTEGER, collection TEXT)');
   });
 
   //hive db initialization

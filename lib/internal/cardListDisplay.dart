@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:one_brain_cell/internal/flashcardDisplay.dart';
 import 'package:sqflite/sqflite.dart';
+import 'dart:math';
 
 import 'package:one_brain_cell/utils/sqlHelper.dart';
 import 'package:one_brain_cell/utils/pageCreator.dart';
 import 'package:one_brain_cell/utils/store/cardCollection.dart';
+import 'package:one_brain_cell/utils/store/flashcard.dart';
 
 class CardListDisplay extends StatefulWidget {
   CardListDisplay({Key? key, required this.currentCollection})
@@ -21,18 +24,39 @@ class CardListDisplay extends StatefulWidget {
 
 class _CardListDisplayState extends State<CardListDisplay> {
   Box idListBox = Hive.box('idlists');
-  List<String> reallyLongList =
-      List<String>.generate(100, (index) => "list row long name $index");
+  late List<int> rowIdList =
+      idListBox.get(widget.currentCollection.collectionName);
 
   late CardCollection curCardList = widget.currentCollection;
   TextEditingController frontTextController = TextEditingController();
   TextEditingController backTextController = TextEditingController();
 
+  //when building the state, all existing cards need to be loaded using futurebuilder
+  //then when adding cards, if index within range of cardFrontList, we just load immediately after setstate
+  Future<Flashcard> _getCardAtIndex(int rowid) async {
+    Database cardDatabase = await SqlHelper.getDatabase('flashcards.db');
+    List<Map> cardMapList = await cardDatabase
+        .query('Flashcards', where: 'ID = ?', whereArgs: [rowid]);
+
+    Flashcard card = new Flashcard(
+        cardMapList[0]['front'],
+        cardMapList[0]['back'],
+        cardMapList[0]['status'],
+        cardMapList[0]['collection']);
+    return card;
+  }
+
   void _createFlashcard(String frontText, String backText) async {
     Database cardDatabase = await SqlHelper.getDatabase('flashcards.db');
 
     int rowid = await cardDatabase.insert(
-        'Flashcards', {'front': frontText, 'back': backText, 'status': 0},
+        'Flashcards',
+        {
+          'front': frontText,
+          'back': backText,
+          'status': 0,
+          'collection': widget.currentCollection.collectionName
+        },
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     //place list of ids in idlistbox
@@ -43,8 +67,38 @@ class _CardListDisplayState extends State<CardListDisplay> {
 
     //delete this later
     print('___ cardListDisplay.dart ___');
-    print(await cardDatabase.rawQuery('SELECT * FROM Flashcards'));
-    print(idListBox.get(widget.currentCollection.collectionName));
+    print(
+        'Everything in database: ${await cardDatabase.rawQuery('SELECT * FROM Flashcards')}');
+    print(
+        'all cards in this list: ${idListBox.get(widget.currentCollection.collectionName)}');
+
+    //set state of list because updated
+    setState(() {
+      rowIdList = idList;
+    });
+  }
+
+  void _deleteFlashcard(int index) async {
+    //delete from idlist, update idlistbox and state
+    int deletedRowId = rowIdList[index];
+    setState(() {
+      rowIdList.removeAt(index);
+      idListBox.put(widget.currentCollection.collectionName, rowIdList);
+    });
+
+    //delete from database
+    Database cardDatabase = await SqlHelper.getDatabase('flashcards.db');
+    cardDatabase
+        .delete('Flashcards', where: 'ID = ?', whereArgs: [deletedRowId]);
+  }
+
+  //show flashcard in new page
+  void _displayFlashcard(int rowid) async {
+    Database cardDatabase = await SqlHelper.getDatabase('flashcards.db');
+    Flashcard card = await _getCardAtIndex(rowid);
+
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => FlashcardDisplay(card: card)));
   }
 
   Future<dynamic> _showAddFlashcardBottomSheet() {
@@ -128,14 +182,45 @@ class _CardListDisplayState extends State<CardListDisplay> {
                     ])),
             Expanded(
                 child: ListView.builder(
-                    itemCount: reallyLongList.length,
+                    itemCount: rowIdList.length,
                     padding:
                         const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(reallyLongList[index],
-                            style: Theme.of(context).textTheme.bodyText1),
-                      );
+                      //loading is just empty container
+                      return FutureBuilder(
+                          future: _getCardAtIndex(rowIdList[index]),
+                          builder: ((context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Container();
+                            } else {
+                              String cardFrontText =
+                                  "Error: database returned null";
+                              if (snapshot.data != null) {
+                                cardFrontText = snapshot.data?.front as String;
+                              }
+                              return Dismissible(
+                                  key: ValueKey(rowIdList[index]),
+                                  direction: DismissDirection.endToStart,
+                                  onDismissed: (direction) {
+                                    _deleteFlashcard(index);
+                                  },
+                                  background:
+                                      PageCreator.makeDismissibleBackground(
+                                          context),
+                                  child: ListTile(
+                                      onTap: () {
+                                        _displayFlashcard(rowIdList[index]);
+                                      },
+                                      leading: Icon(
+                                          CupertinoIcons.rectangle_on_rectangle,
+                                          color: Theme.of(context)
+                                              .secondaryHeaderColor),
+                                      title: Text(cardFrontText,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1)));
+                            }
+                          }));
                     }))
           ]),
         )));
@@ -147,19 +232,4 @@ class _CardListDisplayState extends State<CardListDisplay> {
     backTextController.dispose();
     super.dispose();
   }
-}
-
-// FutureBuilder(
-//       future: slowFuture(),
-//       builder: ((context, snapshot) {
-//         if (!snapshot.hasData) {
-//           return Center(child: CircularProgressIndicator());
-//         } else {
-//           return Center(child: snapshot.data);
-//         }
-//       }),
-//     )
-Future<Widget> slowFuture() async {
-  await Future.delayed(Duration(seconds: 1));
-  return Text('Loaded!');
 }

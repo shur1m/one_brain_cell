@@ -78,6 +78,21 @@ class PageCreator {
               size: Size(size, size), painter: Arc(percentage, color, stroke)),
         ]);
   }
+
+  static Widget makeDismissibleBackground(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.red.shade200,
+      body: Center(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(Icons.delete, color: Theme.of(context).scaffoldBackgroundColor),
+          Padding(padding: EdgeInsets.only(right: 14)),
+        ],
+      )),
+    );
+  }
 }
 
 //for creating arcs of certain length starting from top center

@@ -1,17 +1,11 @@
-enum FlashcardStatus {
-  learned,
-  memorized,
-  started,
-  none,
-}
-
 class Flashcard {
   late String front;
   late String back;
-  late FlashcardStatus status;
+  late String collection;
+  late int status;
 
-  Flashcard(this.front, this.back, this.status);
+  Flashcard(this.front, this.back, this.status, this.collection);
 
   @override
-  String toString() => front;
+  String toString() => 'front: $front back: $back status: $status';
 }
