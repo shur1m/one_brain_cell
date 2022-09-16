@@ -24,24 +24,25 @@ class MyApp extends StatelessWidget {
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100))),
                 foregroundColor: MaterialStateProperty.all(secondary))),
+        fontFamily: 'Hind',
         textTheme: const TextTheme(
           //titles of pages (big)
           headline1: TextStyle(
-              fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
 
           //titles of pages (small)
           headline2: TextStyle(
-              fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
 
           //subtitles of pages
           subtitle1: TextStyle(
-              fontSize: 19, color: Color.fromARGB(255, 154, 154, 154)),
+              fontSize: 17, color: Color.fromARGB(255, 154, 154, 154)),
 
           //normal text (listviews and typing)
-          bodyText1: TextStyle(fontSize: 17),
+          bodyText1: TextStyle(fontSize: 16),
 
           //white version of normal text
-          bodyText2: TextStyle(fontSize: 17, color: Colors.white),
+          bodyText2: TextStyle(fontSize: 16, color: Colors.white),
 
           //flashcard front style
           headline5: TextStyle(

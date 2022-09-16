@@ -194,7 +194,7 @@ class _CardListDisplayState extends State<CardListDisplay> {
             child: Scrollbar(
           child: Column(children: [
             Padding(
-                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -33,8 +33,12 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, bottom: 24, top: 10),
           child: GNav(
+            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            iconSize: 18,
+            textStyle: TextStyle(fontSize: 14, color: activeColor),
             color: Colors.white,
             activeColor: activeColor,
             tabBackgroundColor: Colors.grey.shade900,
@@ -42,23 +46,23 @@ class _HomePageState extends State<HomePage> {
             tabs: [
               GButton(
                 icon: Icons.home,
-                text: _menuNames[0],
                 iconColor: iconColor,
+                text: _menuNames[0],
               ),
               GButton(
                 icon: Icons.list,
-                text: _menuNames[1],
                 iconColor: iconColor,
+                text: _menuNames[1],
               ),
               GButton(
                 icon: Icons.add,
-                text: _menuNames[2],
                 iconColor: iconColor,
+                text: _menuNames[2],
               ),
               GButton(
                 icon: Icons.settings,
-                text: _menuNames[3],
                 iconColor: iconColor,
+                text: _menuNames[3],
               ),
             ],
             selectedIndex: _selectedIndex,

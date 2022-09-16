@@ -158,7 +158,7 @@ class _ListsTabState extends State<ListsTab> {
       body: SafeArea(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Padding(
-              padding: EdgeInsets.only(left: 16, top: 16, right: 16),
+              padding: EdgeInsets.only(left: 16, top: 8, right: 16),
               child:
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 Expanded(child: _getTitleWidget()),

@@ -34,7 +34,7 @@ class _HomeTabState extends State<HomeTab> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
             child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -56,12 +56,12 @@ class _HomeTabState extends State<HomeTab> {
                           PageCreator.makeCirclePercentage(
                               _reviewPercentage,
                               Theme.of(context).secondaryHeaderColor,
-                              140,
-                              15,
-                              17),
+                              120,
+                              13,
+                              15),
                           Flexible(
                               child: Text(
-                            'Keep reviewing and you might get another!',
+                            'Keep reviewing and you might just get another!',
                             style: Theme.of(context).textTheme.bodyText2,
                             softWrap: true,
                             textAlign: TextAlign.center,
@@ -70,13 +70,13 @@ class _HomeTabState extends State<HomeTab> {
                         ])),
                 Expanded(
                     child: Padding(
-                        padding: EdgeInsets.only(left: 8),
+                        padding: EdgeInsets.only(top: 16, left: 8),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                  padding: EdgeInsets.only(top: 10, bottom: 3),
+                                  padding: EdgeInsets.only(bottom: 4),
                                   child: Text('Total Cards Learned',
                                       style: Theme.of(context)
                                           .textTheme
