@@ -7,7 +7,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Color secondary = Color.fromARGB(255, 210, 185, 253);
-    const Color secondaryDarker = Color.fromARGB(255, 155, 120, 216);
+    const Color secondaryDarker = Color.fromARGB(255, 156, 125, 211);
+    const Color splash = Color.fromARGB(255, 239, 230, 255);
 
     return MaterialApp(
       title: 'One Brain Cell',
@@ -21,9 +22,10 @@ class MyApp extends StatelessWidget {
         listTileTheme: ListTileThemeData(),
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(splash),
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100))),
-                foregroundColor: MaterialStateProperty.all(secondary))),
+                foregroundColor: MaterialStateProperty.all(secondaryDarker))),
         fontFamily: 'Hind',
         textTheme: const TextTheme(
           //titles of pages (big)

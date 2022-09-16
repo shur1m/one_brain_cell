@@ -21,7 +21,7 @@ class _FlashcardDisplayState extends State<FlashcardDisplay> {
         body: SafeArea(
       child: Stack(children: [
         Padding(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(8),
             child: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
