@@ -17,13 +17,10 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  @override
   double _reviewPercentage = 0.32;
 
+  @override
   Widget build(BuildContext context) {
-    int displayReview = (_reviewPercentage * 100).toInt();
-    ;
-
     //never place int of 0 in heapmapdata or crashes
     Map<DateTime, int> heatMapData = {
       DateTime(2022, 9, 6): 3,
@@ -65,7 +62,7 @@ class _HomeTabState extends State<HomeTab> {
                           Flexible(
                               child: Text(
                             'Keep reviewing and you might get another!',
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodyText2,
                             softWrap: true,
                             textAlign: TextAlign.center,
                           )),

@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:one_brain_cell/utils/pageCreator.dart';
+import 'package:one_brain_cell/utils/cardUtils/flippableFlashcard.dart';
+import 'package:one_brain_cell/utils/cardUtils/roundedFlashcard.dart';
+
 import 'package:one_brain_cell/utils/store/flashcard.dart';
 
 class FlashcardDisplay extends StatefulWidget {
@@ -16,21 +19,39 @@ class _FlashcardDisplayState extends State<FlashcardDisplay> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      child: Stack(children: [
         Padding(
-            padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                      child: PageCreator.makeTitleWithBack(
-                          widget.card.front, context)),
-                ])),
-      ],
-    )));
+            padding: EdgeInsets.all(16),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios_new_rounded,
+                    color: Theme.of(context).secondaryHeaderColor))),
+        Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            FlippableFlashcard(card: widget.card),
+            Padding(padding: EdgeInsets.only(bottom: 8)),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    print('this worked');
+                  },
+                  child: Flexible(
+                      child: Row(children: [
+                    Padding(
+                        padding: EdgeInsets.only(top: 8, bottom: 8, right: 8),
+                        child: Icon(Icons.edit_rounded)),
+                    Text('edit')
+                  ])),
+                )
+              ],
+            ),
+          ]),
+        )
+      ]),
+    ));
   }
 }

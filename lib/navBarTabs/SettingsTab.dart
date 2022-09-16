@@ -14,12 +14,23 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   Box settingsBox = Hive.box('settings');
 
+  _makeSwitchTile(String text, String settingName) {
+    return ListTile(
+      title: Text(text, style: Theme.of(context).textTheme.bodyText1),
+      trailing: CupertinoSwitch(
+        value: settingsBox.get(settingName),
+        activeColor: Theme.of(context).secondaryHeaderColor,
+        onChanged: (bool value) {
+          setState(() {
+            settingsBox.put(settingName, value);
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool _isMulticellular = settingsBox.containsKey('multicellular')
-        ? settingsBox.get('multicellular')
-        : false;
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -29,19 +40,8 @@ class _SettingsTabState extends State<SettingsTab> {
           children: [
             //we can automate making these kinds of buttons
             PageCreator.makeTitle('Settings', context),
-            ListTile(
-              title: Text('I am multicellular',
-                  style: Theme.of(context).textTheme.bodyText1),
-              trailing: CupertinoSwitch(
-                value: _isMulticellular,
-                activeColor: Theme.of(context).secondaryHeaderColor,
-                onChanged: (bool value) {
-                  setState(() {
-                    settingsBox.put('multicellular', value);
-                  });
-                },
-              ),
-            ),
+            _makeSwitchTile('I am multicellular', 'multicellular'),
+            _makeSwitchTile('Flashcard flip animation', 'flipAnimation'),
           ],
         )),
       ),

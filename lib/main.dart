@@ -26,9 +26,20 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(CardCollectionAdapter());
 
-  await Hive.openBox('settings');
+  Box settingsBox = await Hive.openBox('settings');
   await Hive.openBox('dir');
   await Hive.openBox('idlists');
+
+  //ensure settings exist and initialize them
+  List<String> settingNames = ['multicellular', 'flipAnimation'];
+  List defaultValues = [false, true];
+  if (settingNames.length != settingsBox.length) {
+    for (int i = 0; i < settingNames.length; ++i) {
+      if (!settingsBox.containsKey(settingNames[i])) {
+        settingsBox.put(settingNames[i], defaultValues[i]);
+      }
+    }
+  }
 
   //resetting the storage for the app
   // await database.execute("delete from Flashcards");

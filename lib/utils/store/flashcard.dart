@@ -7,5 +7,5 @@ class Flashcard {
   Flashcard(this.front, this.back, this.status, this.collection);
 
   @override
-  String toString() => 'front: $front back: $back status: $status';
+  String toString() => 'front: $front \nback: $back \nstatus: $status';
 }
