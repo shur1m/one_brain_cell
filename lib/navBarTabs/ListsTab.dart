@@ -178,6 +178,7 @@ class _ListsTabState extends State<ListsTab> {
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             itemCount: branches.length,
             onReorder: ((oldIndex, newIndex) {
+              newIndex = (newIndex > oldIndex) ? newIndex - 1 : newIndex;
               if (newIndex >= branches.length) {
                 newIndex = branches.length - 1;
               }
@@ -186,8 +187,11 @@ class _ListsTabState extends State<ListsTab> {
                 newIndex = 0;
               }
 
+              // one zero two
               HiveObjectMixin tmp = branches.removeAt(oldIndex);
               branches.insert(newIndex, tmp);
+              print(oldIndex);
+              print(newIndex);
               root.save();
             }),
             itemBuilder: (context, i) {
