@@ -12,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   //sqlite database initialization
   WidgetsFlutterBinding.ensureInitialized();
+
   var databasesPath = await getDatabasesPath();
   String path = join(databasesPath, 'flashcards.db');
 
