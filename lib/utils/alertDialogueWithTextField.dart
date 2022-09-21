@@ -3,9 +3,13 @@ import 'package:flutter/cupertino.dart';
 class AlertDialogueWithTextField extends StatefulWidget {
   late Function(String) doneFunction;
   late String title;
+  late String placeHolder;
 
   AlertDialogueWithTextField(
-      {Key? key, required this.doneFunction, required this.title})
+      {Key? key,
+      required this.doneFunction,
+      required this.title,
+      required this.placeHolder})
       : super(key: key);
 
   @override
@@ -24,7 +28,7 @@ class _AlertDialogueWithTextFieldState
             padding: EdgeInsets.only(bottom: 10), child: Text(widget.title)),
         content: CupertinoTextField(
           controller: _controller,
-          placeholder: 'Folder Name',
+          placeholder: widget.placeHolder,
         ),
         actions: <CupertinoDialogAction>[
           CupertinoDialogAction(

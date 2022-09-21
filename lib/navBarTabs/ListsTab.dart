@@ -73,6 +73,7 @@ class _ListsTabState extends State<ListsTab> {
         context: context,
         builder: (BuildContext context) => AlertDialogueWithTextField(
               title: isList ? 'Create List' : 'Create Folder',
+              placeHolder: isList ? 'List Name' : 'Folder Name',
               doneFunction: (String text) {
                 _createCollection(text, isList);
               },
