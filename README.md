@@ -12,3 +12,7 @@ One Brain Cell is a Spaced Repetition flashcard app that is written for people (
 The app is currently in progress! Here's a little preview of the UI. The build so far features an SQLite database for your flashcards, a working folder system, and data visualization for your hard earned stats.
 
 <img src="https://raw.githubusercontent.com/shur1m/one_brain_cell/main/assets/oneBrainCellPreview.png" height = "500">
+
+Here is a video preview of the application: 
+
+https://user-images.githubusercontent.com/85322327/191438382-bb024af9-a18c-46e1-aabd-1c4178111192.mp4
