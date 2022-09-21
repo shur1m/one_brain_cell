@@ -39,6 +39,7 @@ class _CardListDisplayState extends State<CardListDisplay> {
         .query('Flashcards', where: 'ID = ?', whereArgs: [rowid]);
 
     Flashcard card = new Flashcard(
+        rowid,
         cardMapList[0]['front'],
         cardMapList[0]['back'],
         cardMapList[0]['status'],
@@ -97,85 +98,31 @@ class _CardListDisplayState extends State<CardListDisplay> {
     Database cardDatabase = await SqlHelper.getDatabase('flashcards.db');
     Flashcard card = await _getCardAtIndex(rowid);
 
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => FlashcardDisplay(card: card)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => FlashcardDisplay(
+              card: card,
+              updateCallback: _updateCardName,
+            )));
   }
 
   Future<dynamic> _showAddFlashcardBottomSheet() {
-    return showCupertinoModalBottomSheet(
-        animationCurve: Curves.ease,
-        duration: const Duration(milliseconds: 200),
-        context: context,
-        builder: (context) {
-          return Scaffold(
-              appBar: CupertinoNavigationBar(
-                leading: CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  child: const Text('Cancel',
-                      style: TextStyle(color: Colors.grey)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                trailing: CupertinoButton(
-                  child: Text('Done',
-                      style: TextStyle(color: Theme.of(context).buttonColor)),
-                  padding: const EdgeInsets.all(0),
-                  onPressed: () {
-                    //ensure that there are front and back fields
-                    if (frontTextController.text.isEmpty ||
-                        backTextController.text.isEmpty) {
-                      showCupertinoDialog<void>(
-                          context: context,
-                          builder: (context) {
-                            return CupertinoAlertDialog(
-                              title: Padding(
-                                  padding: EdgeInsets.only(bottom: 5),
-                                  child: Text('Empty Text Fields')),
-                              content: Text(
-                                  'Fun fact: You can\'t learn anything from an empty flashcard.'),
-                              actions: [
-                                CupertinoDialogAction(
-                                    child: Text('OK'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    })
-                              ],
-                            );
-                          });
-                      return;
-                    }
+    return PageCreator.makeEditFlashcardSheet(
+        context, frontTextController, backTextController, () {
+      _createFlashcard(frontTextController.text, backTextController.text);
 
-                    setState(() {
-                      //this should add entry to list in db
-                      //then add rowid to hivelist of CardCollection (curcardlist)
-                      _createFlashcard(
-                          frontTextController.text, backTextController.text);
+      //remove text from controller
+      frontTextController.clear();
+      backTextController.clear();
 
-                      //remove text from controller
-                      frontTextController.clear();
-                      backTextController.clear();
+      Navigator.pop(context);
+    });
+  }
 
-                      Navigator.pop(context);
-                    });
-                  },
-                ),
-              ),
-              body: ListView(children: [
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 9, horizontal: 18),
-                    child: PageCreator.makeCircularTextField(
-                        context: context,
-                        controller: frontTextController,
-                        placeholder: 'Flashcard Front')),
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 9, horizontal: 18),
-                    child: PageCreator.makeCircularTextField(
-                        context: context,
-                        controller: backTextController,
-                        placeholder: 'Flashcard Back'))
-              ]));
-        });
+  //trick card name update after edit
+  void _updateCardName() {
+    setState(() {
+      rowIdList[0] = rowIdList[0];
+    });
   }
 
   @override

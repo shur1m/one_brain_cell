@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PageCreator {
   static Widget makeTitle(String title, BuildContext context) {
@@ -92,6 +95,78 @@ class PageCreator {
         ],
       )),
     );
+  }
+
+  static Future<dynamic> makeEditFlashcardSheet(
+      BuildContext context,
+      TextEditingController frontTextController,
+      TextEditingController backTextController,
+      void Function() onDone) {
+    return showCupertinoModalBottomSheet(
+        animationCurve: Curves.ease,
+        duration: const Duration(milliseconds: 200),
+        context: context,
+        builder: (context) {
+          return Scaffold(
+              appBar: CupertinoNavigationBar(
+                leading: CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  child: const Text('Cancel',
+                      style: TextStyle(color: Colors.grey)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                trailing: CupertinoButton(
+                  child: Text('Done',
+                      style: TextStyle(color: Theme.of(context).buttonColor)),
+                  padding: const EdgeInsets.all(0),
+                  onPressed: () {
+                    //ensure that there are front and back fields
+                    if (frontTextController.text.isEmpty ||
+                        backTextController.text.isEmpty) {
+                      showCupertinoDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Padding(
+                                  padding: EdgeInsets.only(bottom: 5),
+                                  child: Text('Empty Text Fields')),
+                              content: Text(
+                                  'Fun fact: You can\'t learn anything from an empty flashcard.'),
+                              actions: [
+                                CupertinoDialogAction(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    })
+                              ],
+                            );
+                          });
+                      return;
+                    }
+
+                    //this should add entry to list in db
+                    //then add rowid to hivelist of CardCollection (curcardlist)
+                    onDone();
+                  },
+                ),
+              ),
+              body: ListView(children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 9, horizontal: 18),
+                    child: PageCreator.makeCircularTextField(
+                        context: context,
+                        controller: frontTextController,
+                        placeholder: 'Flashcard Front')),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 9, horizontal: 18),
+                    child: PageCreator.makeCircularTextField(
+                        context: context,
+                        controller: backTextController,
+                        placeholder: 'Flashcard Back'))
+              ]));
+        });
   }
 }
 
