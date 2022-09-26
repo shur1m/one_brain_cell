@@ -28,7 +28,8 @@ class CardListDisplay extends StatefulWidget {
 class _CardListDisplayState extends State<CardListDisplay> {
   Box idListBox = Hive.box('idlists');
 
-  late List<int> rowIdList = idListBox.get(widget.currentCollection.key);
+  late List<int> rowIdList =
+      idListBox.get(widget.currentCollection.collectionName);
 
   late CardCollection curCardList = widget.currentCollection;
   TextEditingController frontTextController = TextEditingController();
@@ -64,10 +65,10 @@ class _CardListDisplayState extends State<CardListDisplay> {
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     //place list of ids in idlistbox
-    List<int> idList =
-        idListBox.get(widget.currentCollection.key, defaultValue: <int>[]);
+    List<int> idList = idListBox
+        .get(widget.currentCollection.collectionName, defaultValue: <int>[]);
     idList.add(rowid);
-    idListBox.put(widget.currentCollection.key, idList);
+    idListBox.put(widget.currentCollection.collectionName, idList);
 
     //for debugging database
     // print('___ cardListDisplay.dart ___');
@@ -87,7 +88,7 @@ class _CardListDisplayState extends State<CardListDisplay> {
     int deletedRowId = rowIdList[index];
     setState(() {
       rowIdList.removeAt(index);
-      idListBox.put(widget.currentCollection.key, rowIdList);
+      idListBox.put(widget.currentCollection.collectionName, rowIdList);
     });
 
     //delete from database
@@ -131,7 +132,10 @@ class _CardListDisplayState extends State<CardListDisplay> {
   }
 
   void _updateListName(String newName) {
-    //we need to update collection
+    //we need to update both idlist and collection
+    idListBox.delete(widget.currentCollection.collectionName);
+    idListBox.put(newName, rowIdList);
+
     setState(() {
       widget.currentCollection.collectionName = newName;
       widget.currentCollection.save();

@@ -86,12 +86,13 @@ class _FlashcardDisplayState extends State<FlashcardDisplay> {
                   onPressed: () {
                     _showAddFlashcardBottomSheet();
                   },
-                  child: Row(children: [
+                  child: Flexible(
+                      child: Row(children: [
                     Padding(
                         padding: EdgeInsets.only(top: 8, bottom: 8, right: 8),
                         child: Icon(Icons.edit_rounded)),
                     Text('edit')
-                  ]),
+                  ])),
                 )
               ],
             ),

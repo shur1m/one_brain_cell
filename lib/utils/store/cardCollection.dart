@@ -31,7 +31,7 @@ class CardCollection extends HiveObject {
     //everything inside it as well as self from idlist box
     if (isList) {
       Box idListBox = Hive.box('idlists');
-      List<int> idList = idListBox.get(key);
+      List<int> idList = idListBox.get(collectionName);
 
       //delete all cards inside from database
       Database db = await SqlHelper.getDatabase('flashcards.db');

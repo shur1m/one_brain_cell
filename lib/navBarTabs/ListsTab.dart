@@ -117,6 +117,25 @@ class _ListsTabState extends State<ListsTab> {
 
   //add folder to root Hivelist and dirbox
   void _createCollection(String title, bool isList) {
+    //ensure no duplicate names for lists
+    if (isList && Hive.box('idlists').containsKey(title)) {
+      showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('Choose another Name'),
+              content: Text('Flashcard lists cannot have the same name.'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text('OK'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          });
+      return;
+    }
+
     //add folder to root and update screen
     setState(() {
       CardCollection newCollection = CardCollection(
@@ -127,7 +146,7 @@ class _ListsTabState extends State<ListsTab> {
 
       //place empty id list into idlists box
       if (isList) {
-        Hive.box('idlists').put(newCollection.key, <int>[]);
+        Hive.box('idlists').put(title, <int>[]);
       }
     });
   }
