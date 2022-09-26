@@ -48,17 +48,18 @@ class _FlashcardDisplayState extends State<FlashcardDisplay> {
 
   //function to show the editor on press
   void _showAddFlashcardBottomSheet() {
+    frontTextController.text = widget.card.front;
+    backTextController.text = widget.card.back;
     PageCreator.makeEditFlashcardSheet(
         context, frontTextController, backTextController, () {
       _updateFlashcard(frontTextController.text, backTextController.text);
 
-      //remove text from controller
-      frontTextController.clear();
-      backTextController.clear();
-
       widget.updateCallback();
 
       Navigator.pop(context);
+      //remove text from controller
+      frontTextController.clear();
+      backTextController.clear();
     });
   }
 
