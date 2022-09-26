@@ -3,10 +3,13 @@ class Flashcard {
   late String front;
   late String back;
   late String collection;
+  late int collectionKey;
   late int status;
 
-  Flashcard(this.rowid, this.front, this.back, this.status, this.collection);
+  Flashcard(this.rowid, this.front, this.back, this.status, this.collection,
+      this.collectionKey);
 
   @override
-  String toString() => 'front: $front \nback: $back \nstatus: $status';
+  String toString() =>
+      'front: $front \nback: $back \nstatus: $status \ncollectionKey: $collectionKey';
 }

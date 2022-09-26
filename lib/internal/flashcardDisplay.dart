@@ -34,7 +34,7 @@ class _FlashcardDisplayState extends State<FlashcardDisplay> {
           'front': front,
           'back': back,
           'status': widget.card.status,
-          'collection': widget.card.collection
+          'collection': widget.card.collectionKey
         },
         where: 'ID = ?',
         whereArgs: [widget.card.rowid],

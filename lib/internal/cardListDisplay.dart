@@ -41,12 +41,14 @@ class _CardListDisplayState extends State<CardListDisplay> {
     List<Map> cardMapList = await cardDatabase
         .query('Flashcards', where: 'ID = ?', whereArgs: [rowid]);
 
-    Flashcard card = new Flashcard(
+    int collectionKey = cardMapList[0]['collection'];
+    Flashcard card = Flashcard(
         rowid,
         cardMapList[0]['front'],
         cardMapList[0]['back'],
         cardMapList[0]['status'],
-        cardMapList[0]['collection']);
+        (Hive.box('dir').get(collectionKey) as CardCollection).collectionName,
+        collectionKey);
     return card;
   }
 
@@ -59,7 +61,7 @@ class _CardListDisplayState extends State<CardListDisplay> {
           'front': frontText,
           'back': backText,
           'status': 0,
-          'collection': widget.currentCollection.collectionName
+          'collection': widget.currentCollection.key
         },
         conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -74,7 +76,7 @@ class _CardListDisplayState extends State<CardListDisplay> {
     // print(
     //     'Everything in database: ${await cardDatabase.rawQuery('SELECT * FROM Flashcards')}');
     // print(
-    //     'all cards in this list: ${idListBox.get(widget.currentCollection.collectionName)}');
+    //     'all cards in list ${widget.currentCollection.key} : ${idListBox.get(widget.currentCollection.key)}');
 
     //set state of list because updated
     setState(() {
