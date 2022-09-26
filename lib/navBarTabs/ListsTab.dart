@@ -9,10 +9,14 @@ import 'package:one_brain_cell/utils/pageCreator.dart';
 import 'package:one_brain_cell/utils/store/cardCollection.dart';
 
 class ListsTab extends StatefulWidget {
-  ListsTab({Key? key, CardCollection? this.currentCollection})
+  ListsTab(
+      {Key? key,
+      CardCollection? this.currentCollection,
+      Function()? this.updateNameCallback})
       : super(key: key);
 
   CardCollection? currentCollection;
+  Function()? updateNameCallback;
 
   @override
   _ListsTabState createState() => _ListsTabState();
@@ -58,7 +62,10 @@ class _ListsTabState extends State<ListsTab> {
   void _displayFolder(CardCollection next, BuildContext context) {
     //display the view of the list pressed
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ListsTab(currentCollection: next)));
+        builder: (context) => ListsTab(
+              currentCollection: next,
+              updateNameCallback: _updateEntryName,
+            )));
   }
 
   void _displayCardList(CardCollection next, BuildContext context) {
@@ -138,6 +145,48 @@ class _ListsTabState extends State<ListsTab> {
     });
   }
 
+  void _showOptionActionSheet() {
+    List<Widget> actions = [];
+    if (!isRootFolder) {
+      actions.add(CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+            _displayEditFolderNameAlert();
+          },
+          child: Text('Edit Folder Name')));
+    }
+
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+              actions: actions,
+              cancelButton: CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel')),
+            ));
+  }
+
+  void _displayEditFolderNameAlert() {
+    showCupertinoDialog(
+        context: context,
+        builder: (context) => AlertDialogueWithTextField(
+            doneFunction: _updateFolderName,
+            title: 'Rename Folder',
+            placeHolder: 'New Folder Name'));
+  }
+
+  void _updateFolderName(String newName) {
+    setState(() {
+      widget.currentCollection?.collectionName = newName;
+      widget.currentCollection?.save();
+    });
+
+    if (widget.updateNameCallback != null)
+      (widget.updateNameCallback as Function())();
+  }
+
   @override
   Widget build(BuildContext context) {
     //if no root folder, add it
@@ -161,6 +210,11 @@ class _ListsTabState extends State<ListsTab> {
                       Icons.add,
                       color: Theme.of(context).secondaryHeaderColor,
                     )),
+                IconButton(
+                  onPressed: _showOptionActionSheet,
+                  icon: Icon(Icons.more_vert,
+                      color: Theme.of(context).secondaryHeaderColor),
+                )
               ])),
           Expanded(
               //make this reusable means Function(list, Title, functionwhenpressed)
