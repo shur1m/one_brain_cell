@@ -39,9 +39,6 @@ class CardCollection extends HiveObject {
 
       //delete idlists from box
       idListBox.delete(collectionKey);
-      print(collectionKey);
-      print(idListBox.toMap());
-      print(await db.rawQuery('SELECT * FROM Flashcards'));
       return;
     }
 
