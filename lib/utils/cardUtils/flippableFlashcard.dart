@@ -15,9 +15,6 @@ class _FlippableFlashcardState extends State<FlippableFlashcard> {
   @override
   Widget build(BuildContext context) {
     return FlipCard(
-      onFlip: () {
-        print(widget.card);
-      },
       front: RoundedFlashcard(
           card: widget.card,
           child: Text(

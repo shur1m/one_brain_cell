@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:one_brain_cell/internal/flashcardDisplay.dart';
+import 'package:one_brain_cell/utils/alertDialogueWithTextField.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:math';
 
 import 'package:one_brain_cell/utils/sqlHelper.dart';
 import 'package:one_brain_cell/utils/pageCreator.dart';
@@ -13,10 +12,14 @@ import 'package:one_brain_cell/utils/store/cardCollection.dart';
 import 'package:one_brain_cell/utils/store/flashcard.dart';
 
 class CardListDisplay extends StatefulWidget {
-  CardListDisplay({Key? key, required this.currentCollection})
+  CardListDisplay(
+      {Key? key,
+      required this.currentCollection,
+      required this.updateListNameCallback})
       : super(key: key);
 
   late CardCollection currentCollection;
+  late Function() updateListNameCallback;
 
   @override
   _CardListDisplayState createState() => _CardListDisplayState();
@@ -24,6 +27,7 @@ class CardListDisplay extends StatefulWidget {
 
 class _CardListDisplayState extends State<CardListDisplay> {
   Box idListBox = Hive.box('idlists');
+
   late List<int> rowIdList =
       idListBox.get(widget.currentCollection.collectionName);
 
@@ -118,7 +122,49 @@ class _CardListDisplayState extends State<CardListDisplay> {
     });
   }
 
-  //trick card name update after edit
+  void _displayEditListNameAlert() {
+    showCupertinoDialog<void>(
+        context: context,
+        builder: (BuildContext context) => AlertDialogueWithTextField(
+            doneFunction: _updateListName,
+            title: 'Rename List',
+            placeHolder: 'New List Name'));
+  }
+
+  void _updateListName(String newName) {
+    //we need to update both idlist and collection
+    idListBox.delete(widget.currentCollection.collectionName);
+    idListBox.put(newName, rowIdList);
+
+    setState(() {
+      widget.currentCollection.collectionName = newName;
+      widget.currentCollection.save();
+    });
+
+    widget.updateListNameCallback();
+  }
+
+  void _showOptionActionSheet() {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+              actions: [
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _displayEditListNameAlert();
+                    },
+                    child: Text('Edit List Name'))
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel')),
+            ));
+  }
+
+  //callback used to trick card name update after edit
   void _updateCardName() {
     setState(() {
       rowIdList[0] = rowIdList[0];
@@ -150,6 +196,11 @@ class _CardListDisplayState extends State<CardListDisplay> {
                           child: PageCreator.makeTitleWithBack(
                               widget.currentCollection.collectionName,
                               context)),
+                      //this button should allow study and renaming of list
+                      IconButton(
+                          onPressed: _showOptionActionSheet,
+                          icon: Icon(Icons.more_vert,
+                              color: Theme.of(context).secondaryHeaderColor)),
                     ])),
             Expanded(
                 child: ListView.builder(

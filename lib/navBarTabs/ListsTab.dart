@@ -65,7 +65,15 @@ class _ListsTabState extends State<ListsTab> {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => CardListDisplay(
               currentCollection: next,
+              updateListNameCallback: _updateEntryName,
             )));
+  }
+
+  //function to trick setState to update after edit of name
+  void _updateEntryName() {
+    setState(() {
+      root.save();
+    });
   }
 
   void _displayCreateCollectionAlert(BuildContext context, bool isList) {
@@ -191,8 +199,6 @@ class _ListsTabState extends State<ListsTab> {
               // one zero two
               HiveObjectMixin tmp = branches.removeAt(oldIndex);
               branches.insert(newIndex, tmp);
-              print(oldIndex);
-              print(newIndex);
               root.save();
             }),
             itemBuilder: (context, i) {
